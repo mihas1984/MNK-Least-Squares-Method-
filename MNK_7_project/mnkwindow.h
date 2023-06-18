@@ -61,15 +61,18 @@ private slots:
     /// \brief screenCapture()
     /// makes a creenshot of app window and saves as .png file defined by user
     void screenCapture();
+    /// \brief chartScreenShot()
+    /// saves chart as .png to a file defined by user
+    void chartScreenShot();
     /// \brief CreatedefaultModel()
-    /// creates table "X-Y-Name-Units" 2x2 plus adding 2 numbered rows
+    /// creates table "X-Y-deltaX-deltaY;Name-Units-1-2" 4x4 and hides delta columns by default
     void CreatedefaultModel();
     /// \brief saveCsvGeneralFunction()
     /// reads data from tableView and errors from radio buttons and inputs it to .csv file chosen by user (creates file)
     /// \return 0 if ok, -1 if file couldn't be opened
     int saveCsvGeneralFunction();
     /// \brief allXErrsToggled()
-    /// when toggled on creates delta X column for errors, when toggled off deletes that column
+    /// when toggled on shows delta X column for errors, when toggled off hides that column
     void allXErrsToggled();
     /// \brief noXErrsToggled()
     /// default configuration for errors
@@ -78,7 +81,7 @@ private slots:
     /// enables lineEdit beneath for inputting fixed, when toggled off - disables
     void fixedXErrsToggled();
     /// \brief allYErrsToggled()
-    /// when toggled on creates delta Y column for errors, when toggled off deletes that column
+    /// when toggled on shows delta Y column for errors, when toggled off hides that column
     void allYErrsToggled();
     /// \brief noYErrsToggled()
     /// default configuration for errors
