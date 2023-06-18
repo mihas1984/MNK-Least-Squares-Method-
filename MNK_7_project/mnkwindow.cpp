@@ -21,6 +21,7 @@
 #include <QPixmap>
 #include <QRadioButton>
 #include <algorithm>
+#include <QtMath>
 
 
 MnkWindow::MnkWindow(QWidget *parent) :
@@ -56,6 +57,7 @@ MnkWindow::MnkWindow(QWidget *parent) :
     connect(ui->actionOpen, &QAction::triggered, [=]() {openCsv();});
     connect(ui->actionClose, &QAction::triggered, [=]() {closeCsv();});
     connect(ui->actionScreenCapture, &QAction::triggered, [=]() {screenCapture();});
+    connect(ui->actionChartScreenshot, &QAction::triggered, [=]() {chartScreenShot();});
     //connect listenning to table data modifications:
     connect(m_model,SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(onModified()));
     //connecting radioButtons:
@@ -73,6 +75,8 @@ MnkWindow::MnkWindow(QWidget *parent) :
     //fixed error lineedits disabled by default:
     ui->lineEditXFixedErr->setEnabled(false);
     ui->lineEditYFixedErr->setEnabled(false);
+    //setting slope and intercept text copyable:
+    ui->label_slope_intercept->setTextInteractionFlags(Qt::TextSelectableByMouse);
 }
 
 MnkWindow::~MnkWindow()
@@ -250,7 +254,7 @@ void MnkWindow::saveAsCsv()
 }
 
 void MnkWindow::openCsv()
-{
+{//has a lot of checks to prevent unwated crashes
     //saving previous modifications:
     if(ui->labelStatus->text() == "Modified"){
         QMessageBox::StandardButton reply = QMessageBox::question(this, "Unsaved modifications", "do you want to save changes?", QMessageBox::Yes | QMessageBox::No);
@@ -281,17 +285,11 @@ void MnkWindow::openCsv()
         m_chart = nullptr;
     }
     m_currentFilepath = filename;
-    //arrays of data about to be filled:
-    QStringList xWordList;//x column
-    QStringList yWordList;//y column
-    QStringList xErrWordList;//x column
-    QStringList yErrWordList;//y column
-    bool isAllXErrs = false;
-    bool isAllYErrs = false;
-    //reading first line with error specifications:
+    //reading first two lines with X name Y name and X units Y units:
+    //names:
     QByteArray line = file.readLine();
     if(line == ""){
-        QMessageBox::critical(this, "ERROR", "empty .csv file.");
+        QMessageBox::critical(this, "ERROR", "file is empty.");
         ui->labelStatus->setText("");
         closeCsv();//clearing
         return;
@@ -303,6 +301,48 @@ void MnkWindow::openCsv()
         line.erase(line.end()-1);//erase \r from end
     }
     QList<QByteArray> lineArray = line.split(';');
+    QString xName = lineArray.first();
+    QString yName = lineArray.last();
+    m_model->setData(m_model->index(0,0),xName);
+    m_model->setData(m_model->index(0,1),yName);
+    //units:
+    if(!file.atEnd()){
+        line = file.readLine();
+    }else{
+        QMessageBox::critical(this, "ERROR", "corrupted data in a .csv file.");
+        ui->labelStatus->setText("");
+        closeCsv();//clearing
+        return;
+    }
+    if(line.back() == '\n'){
+        line.erase(line.end()-1);//erase \n from end
+    }
+    if(line.back() == '\r'){
+        line.erase(line.end()-1);//erase \r from end
+    }
+    lineArray = line.split(';');
+    QString xUnits = lineArray.first();
+    QString yUnits = lineArray.last();
+    m_model->setData(m_model->index(1,0), xUnits);
+    m_model->setData(m_model->index(1,1), yUnits);
+    //reading third line with error specifications:
+    bool isAllXErrs = false;
+    bool isAllYErrs = false;
+    if(!file.atEnd()){
+        line = file.readLine();
+    }else{
+        QMessageBox::critical(this, "ERROR", "corrupted data in a .csv file.");
+        ui->labelStatus->setText("");
+        closeCsv();//clearing
+        return;
+    }
+    if(line.back() == '\n'){
+        line.erase(line.end()-1);//erase \n from end
+    }
+    if(line.back() == '\r'){
+        line.erase(line.end()-1);//erase \r from end
+    }
+    lineArray = line.split(';');
     QString xErrSpecs = lineArray.first();
     QString yErrSpecs = lineArray.last();
     //radio buttons x:
@@ -343,6 +383,11 @@ void MnkWindow::openCsv()
         closeCsv();//clearing
         return;
     }
+    //arrays of data about to be filled:
+    QStringList xWordList;//x column
+    QStringList yWordList;//y column
+    QStringList xErrWordList;//x err column
+    QStringList yErrWordList;//y err column
     //reading all the other data into respective arrays:
     while (!file.atEnd()) {
         line = file.readLine();
@@ -353,6 +398,12 @@ void MnkWindow::openCsv()
             line.erase(line.end()-1);//erase \r from end
         }
         lineArray = line.split(';');
+        if(lineArray.size() < 2){//no out of range exception otherwise
+            QMessageBox::critical(this, "ERROR", "corrupted data in a .csv file.");
+            ui->labelStatus->setText("");
+            closeCsv();//clearing
+            return;
+        }
         QString xWord = lineArray.at(0);
         QString yWord = lineArray.at(1);
         xWordList.append(xWord);
@@ -390,26 +441,25 @@ void MnkWindow::openCsv()
         }
     }
     //adding rows if needed:
-    if(xWordList.size() > m_model->rowCount()){
-        for(int i = 4; i < xWordList.size(); ++i){
+    if(xWordList.size() > m_model->rowCount() - 2){
+        for(int i = 2; i < xWordList.size(); ++i){
             addRowClicked();
         }
     }
     //outputting to the tableView:
     for(int i = 0; i < xWordList.size(); ++i){
-        m_model->setData(m_model->index(i,0),xWordList.at(i));
-        m_model->setData(m_model->index(i,1),yWordList.at(i));
+        m_model->setData(m_model->index(i + 2,0),xWordList.at(i));
+        m_model->setData(m_model->index(i + 2,1),yWordList.at(i));
         if(isAllXErrs){
-            m_model->setData(m_model->index(i,columnDeltaX),xErrWordList.at(i));
+            m_model->setData(m_model->index(i + 2,columnDeltaX),xErrWordList.at(i));
         }
         if(isAllYErrs){
-            m_model->setData(m_model->index(i,columnDeltaY),yErrWordList.at(i));
+            m_model->setData(m_model->index(i + 2,columnDeltaY),yErrWordList.at(i));
         }
     }
     ui->labelFileName->setText(m_currentFilepath);
     ui->labelStatus->setText("");
-    ui->label_intercept->setText("__________");
-    ui->label_slope->setText("__________");
+    ui->label_slope_intercept->setText("Intercept =   __________\nSlope =   __________");
 }
 
 void MnkWindow::closeCsv()
@@ -437,8 +487,7 @@ void MnkWindow::closeCsv()
     m_currentFilepath = "";
     ui->labelFileName->setText("UNTITLED.csv");//UNTITLED.csv is a default starting point
     ui->labelStatus->setText("");
-    ui->label_intercept->setText("__________");
-    ui->label_slope->setText("__________");
+    ui->label_slope_intercept->setText("Intercept =   __________\nSlope =   __________");
 }
 
 void MnkWindow::screenCapture()
@@ -463,18 +512,45 @@ void MnkWindow::screenCapture()
     pixmap.save(&file, "PNG");
 }
 
+void MnkWindow::chartScreenShot()
+{
+    if(!m_chart){
+        QMessageBox::information(this, "nothing to save", "press \"FIT\" to get a chart.");
+        return;
+    }
+
+    QString filepath = QFileDialog::getSaveFileName(this, tr("Save File"),"screenshot.png", tr("PNG files (*.png)"));//asking user to save file
+    if (filepath.trimmed().isEmpty()){// nothing but whitespace, means cancel was pressed
+        return;
+    }
+    QString fileFormat = filepath.right(4);
+    if(fileFormat != ".png"){
+        QMessageBox::critical(this, "ERROR", "chosen file is not a .png file.");
+        return;
+    }
+
+
+    m_chart->savePng( filepath, m_chart->width(), m_chart->height() );
+}
+
 void MnkWindow::CreatedefaultModel()
 {
     QFont font("Times",14);
     ui->tableView->setFont(font);
     QStandardItem* item{nullptr};
-    // 2x2 by default:
+    // 4x4 by default:
     item = new QStandardItem(QString("X"));
     item->setFont(font);
     m_model->setHorizontalHeaderItem(0, item);
     item = new QStandardItem(QString("Y"));
     item->setFont(font);
     m_model->setHorizontalHeaderItem(1, item);
+    item = new QStandardItem(QString("ΔX"));
+    item->setFont(font);
+    m_model->setHorizontalHeaderItem(2, item);
+    item = new QStandardItem(QString("ΔY"));
+    item->setFont(font);
+    m_model->setHorizontalHeaderItem(3, item);
     item = new QStandardItem(QString("Names"));
     item->setFont(font);
     m_model->setVerticalHeaderItem(0, item);
@@ -486,10 +562,27 @@ void MnkWindow::CreatedefaultModel()
     m_model->setItem(1,0,new QStandardItem(""));
     m_model->setItem(0,1,new QStandardItem(""));
     m_model->setItem(1,1,new QStandardItem(""));
+    m_model->setItem(0,2,new QStandardItem(""));
+    m_model->setItem(1,2,new QStandardItem(""));
+    m_model->setItem(0,3,new QStandardItem(""));
+    m_model->setItem(1,3,new QStandardItem(""));
     //inserting two more rows with number row names:
     addRowClicked();
     addRowClicked();
     ui->tableView->setModel(m_model);
+    //disabling units and names for delta X column:
+    item = m_model->item(0,2);
+    item->setFlags(Qt::NoItemFlags);//disabling input
+    item = m_model->item(1,2);
+    item->setFlags(Qt::NoItemFlags);//disabling input
+    //disabling units and names for delta Y column:
+    item = m_model->item(0,3);
+    item->setFlags(Qt::NoItemFlags);//disabling input
+    item = m_model->item(1,3);
+    item->setFlags(Qt::NoItemFlags);//disabling input
+    //hiding delta columns:
+    ui->tableView->setColumnHidden(2, true);
+    ui->tableView->setColumnHidden(3, true);
 }
 
 int MnkWindow::saveCsvGeneralFunction()
@@ -500,18 +593,7 @@ int MnkWindow::saveCsvGeneralFunction()
         QMessageBox::critical(this, "ERROR", "error saving the file.");
         return -1;
     }
-    //outputting error specifics:
     QTextStream out(&file);
-    out << m_xErrCurrentlyChecked;
-    if(m_xErrCurrentlyChecked == "fixedXErrs"){
-        out << ":" << ui->lineEditXFixedErr->text();
-    }
-    out<< ";";
-    out << m_yErrCurrentlyChecked;
-    if(m_yErrCurrentlyChecked == "fixedYErrs"){
-        out << ":" << ui->lineEditYFixedErr->text();
-    }
-    out << '\n';
     //locating X and Y delta columns:
     int rowCount = m_model->rowCount();
     int columnCount = m_model->columnCount();
@@ -525,12 +607,26 @@ int MnkWindow::saveCsvGeneralFunction()
             deltaYColumnNumber = i;
         }
     }
+    //outputting units and names:
+    out << m_model->item(0, 0)->text() << ";" << m_model->item(0, 1)->text() << "\n";
+    out << m_model->item(1, 0)->text() << ";" << m_model->item(1, 1)->text() << "\n";
+    //outputting error specifics:
+    out << m_xErrCurrentlyChecked;
+    if(m_xErrCurrentlyChecked == "fixedXErrs"){
+        out << ":" << ui->lineEditXFixedErr->text();
+    }
+    out<< ";";
+    out << m_yErrCurrentlyChecked;
+    if(m_yErrCurrentlyChecked == "fixedYErrs"){
+        out << ":" << ui->lineEditYFixedErr->text();
+    }
+    out << '\n';
     //counting how many empty lines at the end will be left out:
     int emptyRowsFromEnd = 0;
     bool isBreak{false};//for breaking two loops
-    for(int i = rowCount - 1; i >= 0; --i){
+    for(int i = rowCount - 1; i > 1; --i){//ending at row #1 of data points
         for(int j = 0; j < columnCount; ++j){
-            if(m_model->item(i, j)->text().toStdString().find_first_not_of(' ') != std::string::npos){//there are only spaces
+            if(!ui->tableView->isColumnHidden(j) && m_model->item(i, j)->text().toStdString().find_first_not_of(' ') != std::string::npos){//there are not only spaces, or column is not visible
                 isBreak = true;
             }
             if(isBreak){break;}
@@ -540,10 +636,9 @@ int MnkWindow::saveCsvGeneralFunction()
     }
     emptyRowsFromEnd /= columnCount;
     //reading table and outputting to a file:
-    for(int i = 0; i < rowCount - emptyRowsFromEnd; ++i){
+    for(int i = 2; i < rowCount - emptyRowsFromEnd; ++i){//starting from row #1 of data points
         QString line{""};
         line += m_model->item(i, 0)->text() + ";" + m_model->item(i, 1)->text();
-
         if(m_xErrCurrentlyChecked == "allXErrs"){
             line += ";" + m_model->item(i, deltaXColumnNumber)->text();
         }
@@ -561,32 +656,11 @@ int MnkWindow::saveCsvGeneralFunction()
 
 void MnkWindow::allXErrsToggled()
 {
-    if(m_xErrCurrentlyChecked != "allXErrs"){//adding ΔX column at the right
+    if(m_xErrCurrentlyChecked != "allXErrs"){//showing delta X column
         m_xErrCurrentlyChecked = "allXErrs";
-        QFont font("Times",14);
-        QStandardItem* item{nullptr};
-        item = new QStandardItem(QString("ΔX"));
-        item->setFont(font);
-        m_model->setHorizontalHeaderItem(m_model->columnCount(), item);
-        //setting empty items:
-        int columnCount = m_model->columnCount();
-        int rowCount = m_model->rowCount();
-        for(int i = 0; i < rowCount; ++i){
-            m_model->setItem(i,columnCount-1,new QStandardItem(""));
-        }
-        //disabling units and names for delta X column:
-        item = m_model->item(0,columnCount-1);
-        item->setFlags(Qt::NoItemFlags);//disabling input
-        item = m_model->item(1,columnCount-1);
-        item->setFlags(Qt::NoItemFlags);//disabling input
-    }else{//finding and deleting ΔX column
-        for(int i = 0; i < m_model->columnCount(); ++i){
-            if(m_model->horizontalHeaderItem(i)->text() == "ΔX"){
-                m_model->removeColumn(i);
-                break;
-            }
-        }
-        ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//stretching again after deleting
+        ui->tableView->setColumnHidden(2, false);
+    }else{//hiding delta X column
+        ui->tableView->setColumnHidden(2, true);
     }
     onModified();//showing that things changed
 }
@@ -613,32 +687,11 @@ void MnkWindow::fixedXErrsToggled()
 
 void MnkWindow::allYErrsToggled()
 {
-    if(m_yErrCurrentlyChecked != "allYErrs"){//dding ΔY column at the right
+    if(m_yErrCurrentlyChecked != "allYErrs"){//showing delta Y column
         m_yErrCurrentlyChecked = "allYErrs";
-        QFont font("Times",14);
-        QStandardItem* item{nullptr};
-        item = new QStandardItem(QString("ΔY"));
-        item->setFont(font);
-        m_model->setHorizontalHeaderItem(m_model->columnCount(), item);
-        //setting empty items:
-        int columnCount = m_model->columnCount();
-        int rowCount = m_model->rowCount();
-        for(int i = 0; i < rowCount; ++i){
-            m_model->setItem(i,columnCount-1,new QStandardItem(""));
-        }
-        //disabling units and names for delta Y column:
-        item = m_model->item(0,columnCount-1);
-        item->setFlags(Qt::NoItemFlags);//disabling input
-        item = m_model->item(1,columnCount-1);
-        item->setFlags(Qt::NoItemFlags);//disabling input
-    }else{//finding and deleting ΔY column
-        for(int i = 0; i < m_model->columnCount(); ++i){
-            if(m_model->horizontalHeaderItem(i)->text() == "ΔY"){
-                m_model->removeColumn(i);
-                break;
-            }
-        }
-        ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//stretching again after deleting
+        ui->tableView->setColumnHidden(3, false);
+    }else{//hiding delta Y column
+        ui->tableView->setColumnHidden(3, true);
     }
     onModified();//showing that things changed
 }
@@ -705,25 +758,99 @@ int MnkWindow::fitButtonClicked()
     //computating errors:
     long double slopeError{};
     long double interceptError{};
-    QString slopeLabelText{""};
-    QString interceptLabelText{""};
-    bool areErrors{true};
-    if(computate_equation_error(xLongVec, yLongVec, slope, intercept, slopeError, interceptError)){//then there are no deviations
-        areErrors = false;
+    QString interceptSlopeText{""};
+    computate_equation_error(xLongVec, yLongVec, slope, intercept, slopeError, interceptError);
+
+    {//block for setting intercept-slope label, most of the job is to output double values in a scientific format and make it look clean otherwise
+        std::ostringstream outDoubleFormatTextStream;
+        outDoubleFormatTextStream << "Intercept =  ";
+        if(((int)qFabs(intercept) / 10 || qFabs(intercept) < 1) && intercept){//if number is too big or too small and not a zero(zero also should be 0 and not 0.00000)
+            outDoubleFormatTextStream << std::scientific << (double)intercept;
+        }else{//removing trailing zeros:
+            // Print value to a string
+            std::stringstream ss;
+            ss << std::fixed << intercept;
+            std::string str = ss.str();
+            // Ensure that there is a decimal point somewhere (there should be)
+            if(str.find('.') != std::string::npos)
+            {
+                // Remove trailing zeroes
+                str = str.substr(0, str.find_last_not_of('0')+1);
+                // If the decimal point is now the last character, remove that as well
+                if(str.find('.') == str.size()-1)
+                {
+                    str = str.substr(0, str.size()-1);
+                }
+            }
+            outDoubleFormatTextStream << str;
+        }
+        outDoubleFormatTextStream << " ± ";
+            if(((int)qFabs(interceptError) / 10 || qFabs(interceptError) < 1) && interceptError){//if number is too big or too small and not a zero(zero also should be 0 and not 0.00000)
+            outDoubleFormatTextStream << std::scientific << (double)interceptError;
+        }else{//removing trailing zeros:
+            // Print value to a string
+            std::stringstream ss;
+            ss << std::fixed << interceptError;
+            std::string str = ss.str();
+            // Ensure that there is a decimal point somewhere (there should be)
+            if(str.find('.') != std::string::npos)
+            {
+                // Remove trailing zeroes
+                str = str.substr(0, str.find_last_not_of('0')+1);
+                // If the decimal point is now the last character, remove that as well
+                if(str.find('.') == str.size()-1)
+                {
+                    str = str.substr(0, str.size()-1);
+                }
+            }
+            outDoubleFormatTextStream << str;
+        }
+        outDoubleFormatTextStream << "\nSlope =  ";
+        if(((int)qFabs(slope) / 10 || qFabs(slope) < 1) && slope){//if number is too big or too small and not a zero(zero also should be 0 and not 0.00000)
+            outDoubleFormatTextStream << std::scientific << (double)slope;
+        }else{//removing trailing zeros:
+            // Print value to a string
+            std::stringstream ss;
+            ss << std::fixed << slope;
+            std::string str = ss.str();
+            // Ensure that there is a decimal point somewhere (there should be)
+            if(str.find('.') != std::string::npos)
+            {
+                // Remove trailing zeroes
+                str = str.substr(0, str.find_last_not_of('0')+1);
+                // If the decimal point is now the last character, remove that as well
+                if(str.find('.') == str.size()-1)
+                {
+                    str = str.substr(0, str.size()-1);
+                }
+            }
+            outDoubleFormatTextStream << str;
+        }
+        outDoubleFormatTextStream << " ± ";
+            if(((int)qFabs(slopeError) / 10 || qFabs(slopeError) < 1) && slopeError){//if number is too big or too small and not a zero(zero also should be 0 and not 0.00000)
+            outDoubleFormatTextStream << std::scientific << (double)slopeError;
+        }else{//removing trailing zeros:
+            // Print value to a string
+            std::stringstream ss;
+            ss << std::fixed << slopeError;
+            std::string str = ss.str();
+            // Ensure that there is a decimal point somewhere (there should be)
+            if(str.find('.') != std::string::npos)
+            {
+                // Remove trailing zeroes
+                str = str.substr(0, str.find_last_not_of('0')+1);
+                // If the decimal point is now the last character, remove that as well
+                if(str.find('.') == str.size()-1)
+                {
+                    str = str.substr(0, str.size()-1);
+                }
+            }
+            outDoubleFormatTextStream << str;
+        }
+        interceptSlopeText = QString::fromStdString(outDoubleFormatTextStream.str());
+        ui->label_slope_intercept->setText(interceptSlopeText);
     }
-    //setting slope and intercept label texts:
-    slopeLabelText = QString::fromStdString(std::to_string(slope)) + " ± ";//conversions because Qstring does not support long double
-    interceptLabelText = QString::fromStdString(std::to_string(intercept)) + " ± ";//conversions because Qstring does not support long double
-    if(areErrors){
-        slopeLabelText += QString::fromStdString(std::to_string(slopeError));//conversions because Qstring does not support long double
-        interceptLabelText += QString::fromStdString(std::to_string(interceptError));//conversions because Qstring does not support long double
-    }else{
-        slopeLabelText += "0";
-        interceptLabelText += "0";
-    }
-    //showing intercept and slope
-    ui->label_slope->setText(slopeLabelText);
-    ui->label_intercept->setText(interceptLabelText);
+
     //creating/recreating qCustomPlot:
     if(m_chart){
         m_chart->close();
