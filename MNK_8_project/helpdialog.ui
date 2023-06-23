@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HelpDialog</class>
+ <widget class="QDialog" name="HelpDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1012</width>
+    <height>561</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>840</width>
+    <height>400</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>HELP</string>
+  </property>
+  <widget class="QScrollArea" name="scrollArea">
+   <property name="geometry">
+    <rect>
+     <x>11</x>
+     <y>11</y>
+     <width>941</width>
+     <height>463</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>-185</y>
+      <width>3403</width>
+      <height>1763</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label_1">
+       <property name="font">
+        <font>
+         <pointsize>20</pointsize>
+         <italic>true</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>MNK:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_8">
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+         <bold>true</bold>
+         <underline>true</underline>
+        </font>
+       </property>
+       <property name="text">
+        <string>What it is:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_10">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>MNK is a data visualization program, that takes in data points, linearizes them and outputs the &quot;equation&quot; of the linear fit (line's equation is: y = slope * x + intercept).</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_11">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Works using Least Squares Method (that's where its title came from).</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+         <bold>true</bold>
+         <underline>true</underline>
+        </font>
+       </property>
+       <property name="text">
+        <string>Usage:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>input data points (x values in X column, y values - y column)(specifying names and units of X and Y variables is not mandatory). Also specify error values for each of them (either no errors, fixed errors (will then need to specify them in the fields below) or error for every point individulally) and press &quot;FIT&quot; button to see the linearization.
+You can open existing csv files or save newly created (Just see the menubar on the upper left) and also you can take a creenshot of results and save it as .png file to share as a photo (see the Tools option on the menubar) as well as can change the theme of the MNK app (some works may require a light theme).</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+         <bold>true</bold>
+         <underline>true</underline>
+        </font>
+       </property>
+       <property name="text">
+        <string>Additional info:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_13">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>    If it says &quot;file couldn't be opened&quot;:
+Please check if the file is not set as hidden it in its properties in the filebrowser.
+
+    If it says &quot;slope is equal to zero. Data points form a vertical line&quot;:
+It means that it is not a main goal of MNK to work linearizing &quot;vertical&quot; data sets and normally data would be considered invalid.
+
+    If it says &quot;corrupt data&quot;:
+It could mean that the file went through unauthorized changes (beyond the program) and you will need either to give it up or to try manually extract data from it (using wordpad for example by comparing to the valid files)
+It could also mean that the bug was found (if you're sure something is wrong please report the bug using contact info at the end of the page).
+
+New rows appear by themselves when you focus on the last row (implemented for convenience).
+You can use use both variations of real number's point (comma{,} or dot{.}) when filling the table (same actually goes for numbers in SKV).
+You can access some hints regarding errors by focusing on the &quot;?&quot; signs to the right of them.
+
+Example of a working program:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="workingProgramPhotoLabel">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>{error displaying photo}</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_15">
+       <property name="font">
+        <font>
+         <pointsize>20</pointsize>
+         <italic>true</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>
+
+SKV</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_16">
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+         <bold>true</bold>
+         <underline>true</underline>
+        </font>
+       </property>
+       <property name="text">
+        <string>What it is:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_18">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>SKV is a simple data analysis program that calculates the mean and error (also provides some other output such as median, range of data, number of observations and Student's coefficient chosen by user (95% confidence interval (or 0.05 significance level) by default)).
+    formula for error:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="formulaLabel">
+       <property name="text">
+        <string>{error displaying formula}</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_17">
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+         <bold>true</bold>
+         <underline>true</underline>
+        </font>
+       </property>
+       <property name="text">
+        <string>Usage:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_19">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Input numbers (preferrably one per line), choose the confidence interval and press calculate.
+Data requirements: there should be only numbers, number count should not be less than 2.
+
+    ||Note: feel free to focus your mouse tip on the &quot;𝜏&quot; to see some detail's.
+ </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_21">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>We use critical values of 𝜏 for 2-tailed tests:    (taken from &lt;a href=&quot;https://www.scribbr.com/&quot;&gt;scribbr.com&lt;/a&gt;)</string>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="tableLabel">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>{error displaying table}</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_23">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>(Degrees of freedom = number of data points - 1)
+Please mind, if we have 35 data points for example, we use 𝜏-value as if for 30 data points (because we have no data for exactly 35 points)
+
+
+
+</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_9">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Find latest releases of MNK app on &lt;a href=&quot;https://github.com/Andriy-Bilenko/MNK-Least-Squares-Method-&quot;&gt;this github page&lt;/a&gt;.</string>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>If you ran into some issues by any chance or need to contact the developer, it would be great to recieve your valuable feedback on emaii:  &lt;a&gt;bilenko.a.uni@gmail.com&lt;/a&gt;.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_last_blank">
+       <property name="text">
+        <string> 
+
+
+
+end of page</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="goBackButton">
+   <property name="geometry">
+    <rect>
+     <x>740</x>
+     <y>390</y>
+     <width>130</width>
+     <height>50</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>130</width>
+     <height>50</height>
+    </size>
+   </property>
+   <property name="text">
+    <string>go back</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
