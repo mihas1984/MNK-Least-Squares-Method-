@@ -11,7 +11,7 @@
     <message>
         <location filename="helpdialog.ui" line="66"/>
         <source>MNK:</source>
-        <translation>MNK:</translation>
+        <translation>МНК:</translation>
     </message>
     <message>
         <location filename="helpdialog.ui" line="83"/>
@@ -22,11 +22,11 @@
     <message>
         <location filename="helpdialog.ui" line="95"/>
         <source>MNK is a data visualization program, that takes in data points, linearizes them and outputs the &quot;equation&quot; of the linear fit (line&apos;s equation is: y = slope * x + intercept).</source>
-        <translation>MNK це програма візуалізації даних, яка приймає на вхід точкові дані (що мають іксову та ігрикову складову), лінеаризує їх та видає &quot;рівняння&quot; апроксимації (рівняння прямої: y = slope * x + intercept).</translation>
+        <translation>MNK - це програма візуалізації даних, яка приймає на вхід іксову та ігрекову координати експериментальних точок, лінеаризує цю залежність та видає &quot;рівняння&quot; апроксимації (рівняння прямої: y = slope * x + intercept).</translation>
     </message>
     <message>
         <location filename="helpdialog.ui" line="107"/>
-        <source>Works using Least Squares Method (that&apos;s where its title came from).</source>
+        <source>Works using Least Squares Method (MNK in Ukrainian, that&apos;s where its title came from).</source>
         <translation>Працює за Методом Найменших Квадратів (звідси і пішла назва).</translation>
     </message>
     <message>
@@ -39,8 +39,8 @@
         <location filename="helpdialog.ui" line="133"/>
         <source>input data points (x values in X column, y values - y column)(specifying names and units of X and Y variables is not mandatory). Also specify error values for each of them (either no errors, fixed errors (will then need to specify them in the fields below) or error for every point individulally) and press &quot;FIT&quot; button to see the linearization.
 You can open existing csv files or save newly created (Just see the menubar on the upper left) and also you can take a creenshot of results and save it as .png file to share as a photo (see the Tools option on the menubar) as well as can change the theme of the MNK app (some works may require a light theme).</source>
-        <translation>введіть дані (іксові складові в колонку Х, ігрикові в У)(уточнювати назви та одиниці не обов&apos;язково). Також установіть значення похибок для даних (або без похибок, з фіксованими похибками(тоді потрібно ввести числа в полях нижче) або похибки незалежно для кожної точки) та натисніть &quot;АПРОКСИМУВАТИ&quot; щоб отримати результат.
-Ви можете відкрити існуючі csv файли або зберегти щойно створені (див. панель меню зліва зверху, &quot;Файл&quot;), також ви можете зробити скріншот результатів та зберегти як png щоб поділитися з іншими (див. опція &quot;Інструменти&quot;), додатково можна змінити тему програми (деякі роботи можуть вимагати світлу тему)(див. опція &quot;Вигляд&quot;).</translation>
+        <translation>введіть координати експериментальних точок (іксові складові в колонку Х, ігрекові в У)(уточнювати назви та одиниці не обов&apos;язково). Також установіть значення похибок для даних (без похибок, з фіксованими похибками (тоді потрібно ввести числа в полях нижче) або похибки для кожної точки окремо) та натисніть &quot;АПРОКСИМУВАТИ&quot; щоб отримати результат.
+Ви можете відкрити існуючі csv файли або зберегти щойно створені (див. панель меню зліва зверху, &quot;Файл&quot;), також ви можете зробити скріншот результатів та зберегти як png, щоб поділитися з іншими (див. опція &quot;Інструменти&quot;). Додатково можна змінити тему програми (деякі роботи можуть вимагати світлу тему)(див. опція &quot;Вигляд&quot;).</translation>
     </message>
     <message>
         <location filename="helpdialog.ui" line="148"/>
@@ -65,13 +65,13 @@ You can access some hints regarding errors by focusing on the &quot;?&quot; sign
 
 Example of a working program:</source>
         <translation>    Якщо у відповідь &quot;файл не вдалося відкрити&quot;:
-Будь ласка перевірте чи файл не встановлено як прихований в його властивостях у вашому файловому провіднику.
+Будь ласка, перевірте, чи файл не встановлено як прихований в його властивостях у вашому файловому менеджері.
 
 Якщо у відповідь &quot;slope дорівнює нулю. Точкові дані формують вертикальну пряму&quot;:
-Це означає, що іксові складові всіх точок однакові і такі дані вважатимуться хибними (їх обробка не є головною ціллю даної програми).
+Це означає, що іксові складові всіх точок однакові і такі дані вважаються некоректними (їх обробка не є головною ціллю даної програми).
 
 Якщо у відповідь &quot;пошкоджені дані&quot;:
-Це може означати що файл було несанкціоновано змінено (поза програмою) та доведеться або позбутися файлу або спробувати вручну дістати дані з нього якщо це ще можливо (використовуючи наприклад wordpad і порівнюючи з працюючими файлами)
+Це може означати що файл було несанкціоновано змінено (поза програмою) та доведеться або позбутися файлу, або спробувати вручну дістати дані з нього якщо це ще можливо (використовуючи, наприклад, wordpad і порівнюючи з працюючими файлами)
 Це також може означати що ви знайшли баг у програмі (якщо ви впевнені, що щось не так, будь ласка, повідомте. Контактні дані в кінці сторінки).
 
 Приклад працюючої програми:</translation>
@@ -92,9 +92,9 @@ SKV</translation>
     </message>
     <message>
         <location filename="helpdialog.ui" line="231"/>
-        <source>SKV is a simple data analysis program that calculates the mean and error (also provides some other output such as median, range of data, number of observations and Student&apos;s coefficient chosen by user (95% confidence interval (or 0.05 significance level) by default)).
+        <source>SKV is a simple data analysis program that calculates the mean and error (also provides some other output such as median, range of data, number of observations and Student&apos;s coefficient chosen by user (95% confidence interval or 0.05 significance level by default)).
     formula for error:</source>
-        <translation>SKV це проста програма, що рахує середнє арифметичне та середню квадратичну похибку (також передбачає визначення медіани, інтервалу спостережень, кількості спостережень та коефіцієнта Стюдента вибраного користувачем (довірчий інтервал 95% (або рівень значущості 0.05) за замовчуванням)).
+        <translation>SKV - це проста програма, що рахує середнє арифметичне та середню квадратичну похибку (також передбачає визначення медіанного значення, інтервалу спостережень, кількості спостережень та коефіцієнта Стюдента вибраного користувачем (довірчий інтервал 95% або рівень значущості 0.05 за замовчуванням)).
     формула для похибки:</translation>
     </message>
     <message>
@@ -110,7 +110,7 @@ Data requirements: there should be only numbers, number count should not be less
     ||Note: feel free to focus your mouse tip on the &quot;𝜏&quot; to see some detail&apos;s.
  </source>
         <translation>Введіть числа (краще в стовпчик), виберіть довірчий інтервал та натисніть &quot;ОБРАХУВАТИ&quot;.
-Вимоги до даних: мають містити лише числа, кількість чисел не має бути меншою за 2.
+Вимоги до даних: вони мають містити лише числа, кількість чисел не має бути меншою за 2.
      ||Зауважте: при наведенні мишкою на &quot;𝜏&quot; відобразяться певні деталі.
  </translation>
     </message>
@@ -133,7 +133,7 @@ Please mind, if we have 35 data points for example, we use 𝜏-value as if for 
 
 </source>
         <translation>(Degrees of freedom(кількість рівнів вільності) = кількості спостережень - 1)
-Зверніть увагу, якщо ми маємо 35 спостережень використовується значення 𝜏 для 30 ступенів вільності (бо немає значення для конкретно 34 ступенів вільності)
+Зверніть увагу, якщо ми маємо 35 спостережень, використовується значення 𝜏 для 30 ступенів вільності (бо немає значення для конкретно 34 ступенів вільності)
 
 
 
@@ -178,12 +178,12 @@ end of page</source>
     <message>
         <location filename="mainwindow.ui" line="73"/>
         <source>MNK</source>
-        <translation>MNK</translation>
+        <translation>МНК</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="98"/>
         <source>SKV</source>
-        <translation>SKV</translation>
+        <translation>СКВ</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="123"/>
@@ -205,7 +205,7 @@ end of page</source>
         <location filename="mainwindow.cpp" line="80"/>
         <location filename="mainwindow.cpp" line="86"/>
         <source>error translating.</source>
-        <translation>помилка перекладання.</translation>
+        <translation>помилка перекладу.</translation>
     </message>
 </context>
 <context>
@@ -238,13 +238,13 @@ end of page</source>
     </message>
     <message>
         <location filename="mnkwindow.ui" line="232"/>
-        <source>x errs</source>
-        <translation>похибки Х</translation>
+        <source>X errs</source>
+        <translation>похибки X</translation>
     </message>
     <message>
         <location filename="mnkwindow.ui" line="251"/>
-        <source>all x errs</source>
-        <translation>всі індивідуальні похибки</translation>
+        <source>all X errs</source>
+        <translation>окремі похибки для кожного X</translation>
     </message>
     <message>
         <location filename="mnkwindow.ui" line="270"/>
@@ -256,35 +256,35 @@ end of page</source>
     </message>
     <message>
         <location filename="mnkwindow.ui" line="292"/>
-        <source>no x errs</source>
-        <translation>немає похибок</translation>
+        <source>no X errs</source>
+        <translation>похибки X відсутні</translation>
     </message>
     <message>
         <location filename="mnkwindow.ui" line="333"/>
         <location filename="mnkwindow.ui" line="466"/>
         <source>fixed relative errs</source>
-        <translation>фіксовані відносні похибки</translation>
+        <translation>фіксована відносна похибка</translation>
     </message>
     <message>
         <location filename="mnkwindow.ui" line="383"/>
         <location filename="mnkwindow.ui" line="493"/>
         <source>fixed absolute errs</source>
-        <translation>фіксовані абсолютні похибки</translation>
+        <translation>фіксована абсолютна похибка</translation>
     </message>
     <message>
         <location filename="mnkwindow.ui" line="431"/>
-        <source>y errs</source>
+        <source>Y errs</source>
         <translation>похибки Y</translation>
     </message>
     <message>
         <location filename="mnkwindow.ui" line="442"/>
-        <source>all y errs</source>
-        <translation>всі індивідуальні похибки</translation>
+        <source>all Y errs</source>
+        <translation>окремі похибки для кожного Y</translation>
     </message>
     <message>
         <location filename="mnkwindow.ui" line="454"/>
-        <source>no y errs</source>
-        <translation>немає похибок</translation>
+        <source>no Y errs</source>
+        <translation>похибки Y відсутні</translation>
     </message>
     <message>
         <location filename="mnkwindow.ui" line="534"/>
@@ -361,22 +361,22 @@ Slope =   __________</translation>
     <message>
         <location filename="mnkwindow.cpp" line="139"/>
         <source>HINT: such an error is proper for times when you get errors for each point on the table individually (by using SKV for example), and so they may unexpectedly differ among themselves</source>
-        <translation>Підказка: така похибка підходить для дослідів, де похибки для кожної точки у таблиці дістаються індивідуально (наприклад використовуючи SKV), вони можуть несподівано різнитися між собою</translation>
+        <translation>Підказка: така похибка підходить для дослідів, де похибки для кожної точки у таблиці дістаються індивідуально (наприклад використовуючи SKV), вони можуть відрізнятись для різних точок</translation>
     </message>
     <message>
         <location filename="mnkwindow.cpp" line="148"/>
         <source>HINT: such an error is proper when specifying and error for X has no sense, for example the number of guitar strings, you cannot say that we&apos;ve got 4 ± 0.0013 strings</source>
-        <translation>Підказка: така похибка підходить для моментів, коли вказування похибки для величини не має сенсу, наприклад тут кількість струн гітари, ми не можемо сказати, що маємо 4 ± 0.0013 струни</translation>
+        <translation>Підказка: нульова похибка підходить для ситуацій, коли похибки для величини не має сенсу, наприклад ми не можемо сказати, що кількість струн гітари дорівнює 4 ± 0.0013 струни</translation>
     </message>
     <message>
         <location filename="mnkwindow.cpp" line="157"/>
-        <source>HINT: such an error is proper when using instrument with an additive scale, if you have needle ammeter, voltmeter or other instrument, please input a value that is equial to accuracy class of the instrument times its maximum value on the scale divided by 100</source>
-        <translation>Підказка: така похибка властива приладам з аддитивною шкалою, якщо у вас стрілковий амперметр, вольтметр чи інший прилад, введіть сюди значення, яке дорівнює класу точності прилада, помноженному на його максимальне значення на шкалі, і поділене на 100</translation>
+        <source>HINT: such an error is proper when using instrument with an additive scale; if you have needle ammeter, voltmeter or other instrument, please input a value that is equial to accuracy class of the instrument times its maximum value on the scale divided by 100</source>
+        <translation>Підказка: така похибка властива приладам з аддитивною шкалою; якщо у вас стрілковий амперметр, вольтметр чи інший прилад, введіть сюди значення, яке дорівнює класу точності прилада, помножене на максимальне значення на його шкалі і поділене на 100</translation>
     </message>
     <message>
         <location filename="mnkwindow.cpp" line="166"/>
         <source>HINT: such an error is proper when using instrument with multiplicative scale. Relative error of X is absolute error for X divided by X. Please input a number in range from 0 to 1, where 1 means 100% relative error</source>
-        <translation>Підказка: така похибка властива приладам з мультиплікативною шкалою,відносна похибка Х це його абсолютна похибка поділена на його значення. Будь ласка введіть число в діапазоні 0 - 1, де 1 означає 100% відносну похибку</translation>
+        <translation>Підказка: така похибка властива приладам з мультиплікативною шкалою. Відносна похибка Х це його абсолютна похибка поділена на його значення. Будь ласка введіть число в діапазоні 0 - 1, де 1 означає 100% відносну похибку</translation>
     </message>
     <message>
         <location filename="mnkwindow.cpp" line="226"/>
