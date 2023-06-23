@@ -7,8 +7,8 @@ Program built with Qt 6.5.0 on Windows 11 64-bit, and is designed exlusively for
 
 ## Usage
 All the necessary explanations provided in HELP pane in the app itself.
-Just install it with fairly easy installation wizard from `MNK_7_1_x64win.exe` and it is ready to do its work.
-To uninstall the program open the file browser and find `PATH\WHERE\YOU\INSTALLED\MNK_7_1\uninstall.exe`. 
+Just install it with fairly easy installation wizard from `MNK_8_0_x64win.exe` and it is ready to do its work.
+To uninstall the program open the file browser and find `PATH\WHERE\YOU\INSTALLED\MNK_8_0\uninstall.exe`. 
 
 ## Working program screenshots:
 ![image](https://github.com/Andriy-Bilenko/MNK-Least-Squares-Method-/blob/main/src/photo1.jpg)
@@ -16,8 +16,11 @@ To uninstall the program open the file browser and find `PATH\WHERE\YOU\INSTALLE
 ![image](https://github.com/Andriy-Bilenko/MNK-Least-Squares-Method-/blob/main/src/photo3.jpg)
 ![image](https://github.com/Andriy-Bilenko/MNK-Least-Squares-Method-/blob/main/src/photo4.jpg)
 ## What's new compared to the previous versions
-- Minor bug fixes, minor add-ons
-- Save chart as png option added
+- Ukrainian language support
+- Fixed relative error option
+- light theme
+- hints and tips
+- automatic new row
 
 ## Contributors:
 - Vysotskyy Mykhaylo
